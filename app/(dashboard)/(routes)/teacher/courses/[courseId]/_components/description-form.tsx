@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { Course } from "@prisma/client";
 import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,13 +26,14 @@ const formSchema = z.object({
 });
 
 interface DescriptionFormProps {
-  initialData: {
-    description: string;
-  };
+  initialData: Course;
   courseId: string;
 }
 
-export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+export const DescriptionForm = ({
+  initialData,
+  courseId,
+}: DescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
 
@@ -41,7 +43,9 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      description: initialData.description || "",
+    },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -72,10 +76,14 @@ export const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps)
         </Button>
       </div>
       {!isEditing ? (
-        <p className={cn(
-          "text-sm mt-2",
-          !initialData.description && "text-orange-500 italic"
-        )}>{initialData.description || "No description"}</p>
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !initialData.description && "text-orange-500 italic"
+          )}
+        >
+          {initialData.description || "No description"}
+        </p>
       ) : (
         <Form {...form}>
           <form

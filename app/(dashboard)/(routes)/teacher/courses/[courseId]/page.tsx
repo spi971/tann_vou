@@ -5,6 +5,7 @@ import { LayoutDashboard } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import DescriptionForm from "./_components/description-form";
+import ImageForm from "./_components/image-form";
 import TitleForm from "./_components/title-form";
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
@@ -59,6 +60,10 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
           courseId={course.id}
           />
           <DescriptionForm 
+          initialData={course}
+          courseId={course.id}
+          />
+          <ImageForm 
           initialData={course}
           courseId={course.id}
           />
